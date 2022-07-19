@@ -17,9 +17,6 @@ python3 -m pip install -U api.mcsrvstat.py
 py -3 -m pip install -U api.mcsrvstat.py
 ```
 
-:warning: | The library is still in its initial development phase and doesn't have a release because it might contain bugs. A release will be published on [PyPi](https://pypi.org) once its stable for production use.
----|---
-
 <br>
 
 ## Wiki & Usage
