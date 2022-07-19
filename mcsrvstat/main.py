@@ -82,7 +82,7 @@ class Base:
     async def fetch_server_icon(self) -> Any:
         """
         Returns an image which refers to the server's icon.
-        - A 64x64 PNG image will always be returned.
+        - The image is returned in `bytes`.
         """
 
         url = self.endpoints['icon'] + self.address
