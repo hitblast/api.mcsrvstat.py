@@ -27,7 +27,7 @@ setup(
     python_requires='>=3.10',
     keywords=['python', 'minecraft', 'mcsrvstat'],
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3.10',
