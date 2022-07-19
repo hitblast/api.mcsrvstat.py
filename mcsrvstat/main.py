@@ -24,9 +24,12 @@ SOFTWARE.
 
 
 
+# Import built-in modules.
+from functools import wraps
+from typing import Any, List
+
 # Import third-party modules.
 import aiohttp
-from typing import Any, List
 
 # Import local modules.
 from mcsrvstat.ext import *
@@ -82,7 +85,7 @@ class Base:
     async def fetch_server_icon(self) -> Any:
         """
         Returns an image which refers to the server's icon.
-        - A 64x64 PNG image will always be returned.
+        - The image is returned in `bytes`.
         """
 
         url = self.endpoints['icon'] + self.address
@@ -102,20 +105,15 @@ class Server:
     def __init__(self, address: str, platform: ServerPlatform=ServerPlatform.java) -> None:
         self.base = Base(address=address, platform=platform)
 
-    def fetch_server_decor(func):
-        async def wrapper(self):
-            data = await self.base.fetch_server()
-            return func(self, data)
-        return wrapper
+    def fetch_server_decor(type: int=1):
+        def decorated(func):
+            @wraps(func)
+            async def wrapper(self):
+                data = await self.base.fetch_server_icon() if type == 2 else self.base.fetch_server()
+                return func(self, data)
 
-    @property
-    @fetch_server_decor
-    def icon(self, *args) -> Any:
-        """
-        The icon of the server. A 64x64 PNG image will always be returned.
-        """
-        
-        return args[0]
+            return wrapper
+        return decorated
 
     @property
     @fetch_server_decor
@@ -176,6 +174,14 @@ class Server:
             return args[0]['gamemode']
         except KeyError:
             return None
+
+    @fetch_server_decor(type=2)
+    def get_icon(self, *args) -> Any:
+        """
+        Gives out an `Icon` object containing the icon of the server.
+        """
+        
+        return Icon(args[0])
 
     @fetch_server_decor
     def get_motd(self, *args) -> ServerMOTD:
