@@ -116,15 +116,6 @@ class Server:
         return decorated
 
     @property
-    @fetch_server_decor(type=2)
-    def icon(self, *args) -> Any:
-        """
-        Gives out an `Icon` object containing the icon of the server.
-        """
-        
-        return Icon(args[0])
-
-    @property
     @fetch_server_decor
     def is_online(self, *args) -> bool:
         """
@@ -183,6 +174,14 @@ class Server:
             return args[0]['gamemode']
         except KeyError:
             return None
+
+    @fetch_server_decor(type=2)
+    def get_icon(self, *args) -> Any:
+        """
+        Gives out an `Icon` object containing the icon of the server.
+        """
+        
+        return Icon(args[0])
 
     @fetch_server_decor
     def get_motd(self, *args) -> ServerMOTD:
