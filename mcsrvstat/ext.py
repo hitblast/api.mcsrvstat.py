@@ -62,7 +62,7 @@ class Icon:
         """
 
         im = Image.open(BytesIO(self.data))
-        file_name = f'{name}.{im.format}'
+        file_name = f'{name}.{im.format.lower()}'
 
         im.save(file_name)
         return file_name
