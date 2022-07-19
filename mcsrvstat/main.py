@@ -176,7 +176,7 @@ class Server:
             return None
 
     @fetch_server_decor(type=2)
-    def get_icon(self, *args) -> Any:
+    def get_icon(self, *args) -> Icon:
         """
         Gives out an `Icon` object containing the icon of the server.
         """
