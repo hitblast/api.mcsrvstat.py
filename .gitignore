@@ -1,0 +1,6 @@
+build
+dist
+venv
+api.mcsrvstat.py.egg-info
+.DS_Store
+__pycache__
