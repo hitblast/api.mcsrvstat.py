@@ -91,7 +91,7 @@ class ServerMOTD:
     Attributes:
         `raw` - No formatting, get the raw one.\n
         `clean` - Retrieve the MOTD in an already formatted way.\n
-        `html` - Retrieve the MOTd in HTML (HyperText Markup Language).
+        `html` - Retrieve the MOTD in HTML.
     """
 
     raw: list
@@ -106,8 +106,8 @@ class ServerInfo:
 
     Attributes:
         `raw` - No formatting, get the raw one.\n
-        `clean` - Retrieve the MOTD in an already formatted way.\n
-        `html` - Retrieve the MOTd in HTML (HyperText Markup Language).
+        `clean` - Retrieve the info in an already formatted way.\n
+        `html` - Retrieve the info in HTML.
     """
 
     raw: list
