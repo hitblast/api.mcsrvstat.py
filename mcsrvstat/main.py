@@ -24,9 +24,12 @@ SOFTWARE.
 
 
 
+# Import built-in modules.
+from functools import wraps
+from typing import Any, List
+
 # Import third-party modules.
 import aiohttp
-from typing import Any, List
 
 # Import local modules.
 from mcsrvstat.ext import *
@@ -102,20 +105,24 @@ class Server:
     def __init__(self, address: str, platform: ServerPlatform=ServerPlatform.java) -> None:
         self.base = Base(address=address, platform=platform)
 
-    def fetch_server_decor(func):
-        async def wrapper(self):
-            data = await self.base.fetch_server()
-            return func(self, data)
-        return wrapper
+    def fetch_server_decor(type: int=1):
+        def decorated(func):
+            @wraps(func)
+            async def wrapper(self):
+                data = await self.base.fetch_server_icon() if type == 2 else self.base.fetch_server()
+                return func(self, data)
+
+            return wrapper
+        return decorated
 
     @property
-    @fetch_server_decor
+    @fetch_server_decor(type=2)
     def icon(self, *args) -> Any:
         """
-        The icon of the server. A 64x64 PNG image will always be returned.
+        Gives out an `Icon` object containing the icon of the server.
         """
         
-        return args[0]
+        return Icon(args[0])
 
     @property
     @fetch_server_decor

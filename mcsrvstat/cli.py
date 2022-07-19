@@ -23,9 +23,12 @@ SOFTWARE.
 '''
 
 
+
+# Import built-in modules.
+import asyncio
+
 # Import third-party modules.
 import click
-import asyncio
 
 # Import local modules.
 from mcsrvstat.main import Base
