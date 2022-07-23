@@ -6,8 +6,12 @@ import os
 # Defiining the setup parameters.
 here = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
-    long_description = "\n" + fh.read()
+with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
+    long_description = "\n" + f.read()
+
+with codecs.open(os.path.join(here, 'requirements.txt'), encoding="utf-8") as f:
+    lines = (x.strip() for x in f.read().splitlines())
+    requirements = [x for x in lines if x and not x.startswith("#")]
 
 VERSION = '2022.7.19'
 DESCRIPTION = 'An asynchronous Python wrapper for the Minecraft Server Status API.'
@@ -23,7 +27,7 @@ setup(
     long_description_content_type='text/markdown',
     long_description=long_description,
     packages=find_packages(),
-    install_requires=['aiohttp', 'click', 'Pillow'],
+    install_requires=requirements,
     python_requires='>=3.10',
     keywords=['python', 'minecraft', 'mcsrvstat'],
     classifiers=[
