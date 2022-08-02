@@ -13,7 +13,7 @@ with codecs.open(os.path.join(here, 'requirements.txt'), encoding="utf-8") as f:
     lines = (x.strip() for x in f.read().splitlines())
     requirements = [x for x in lines if x and not x.startswith("#")]
 
-VERSION = '2022.7.19'
+VERSION = '2022.8.2'
 DESCRIPTION = 'An asynchronous Python wrapper for the Minecraft Server Status API.'
 
 # Setup.
