@@ -21,6 +21,7 @@ py -3 -m pip install -U api.mcsrvstat.py
 
 ## Wiki & Usage
 In order to read about the different methods, extensions and use cases, check out [the GitHub Wiki page](https://github.com/hitblast/api.mcsrvstat.py/wiki/) of this library. There's nothing more important than reading documentations in terms of implementing a new library in your project!
+
 ---
 
 <br>
@@ -29,7 +30,7 @@ In order to read about the different methods, extensions and use cases, check ou
 This project tends to wrap around [Anders G. Jørgensen's original mcsrvstat.us](https://mcsrvstat.us) project. Extending the usage aspects of his work and making it simpler for developers is the goal of it.
 <br><br>
 
-## License [(view real)](https://github.com/hitblast/api.mcsrvstat.py/blob/main/LICENSE)
+## [License](https://github.com/hitblast/api.mcsrvstat.py/blob/main/LICENSE)
 ```
 MIT License
 
