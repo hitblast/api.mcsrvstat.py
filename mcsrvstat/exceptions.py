@@ -23,7 +23,6 @@ SOFTWARE.
 '''
 
 
-
 # Custom exceptions.
 class InvalidServerTypeError(Exception):
     def __str__(self) -> str:

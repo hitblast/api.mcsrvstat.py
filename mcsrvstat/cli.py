@@ -23,13 +23,11 @@ SOFTWARE.
 '''
 
 
-
 # Import built-in modules.
 import asyncio
 
 # Import third-party modules.
 import click
-from PIL import Image
 
 # Import local modules.
 from mcsrvstat.main import Base
@@ -44,7 +42,7 @@ def cli():
 
 # The main command (fetch, in this case).
 @cli.command()
-@click.option('-a', '--address', required=True, type=str, help='The IP address of the  Minecraft server you wish to fetch.')
+@click.option('-a', '--address', required=True, type=str, help='The IP address of a Minecraft server.')
 @click.option('--bedrock', help='Flags the server as a Bedrock Edition instance.', is_flag=True)
 @click.option('--save-icon', help='Downloads the icon of the server and saves it locally.', is_flag=True)
 def fetch(address: str, bedrock: bool, save_icon: bool):

@@ -23,7 +23,6 @@ SOFTWARE.
 '''
 
 
-
 # Import built-in modules.
 from functools import wraps
 from typing import Any, List
@@ -42,7 +41,7 @@ async def perform_get_request(endpoint: str) -> Any | bytes:
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as request:
                 if request.status != 200:
-                    raise DataNotFoundError(f'Request status not OK (failed).')
+                    raise DataNotFoundError('Request status not OK (failed).')
                 elif request.headers['Content-Type'] == 'image/png':
                     return await request.read()
                 else:
@@ -58,8 +57,8 @@ class Base:
     The root class of the library for directly interacting with the API.
 
     Parameters:
-        - address (`str`): The IP address / link used to join the server.\n
-        - platform (`ServerPlatform`): The platform in which the server is running. Defaults to Java.
+        `address: str` - The IP address / link used to join the server.\n
+        `platform: ServerPlatform` - The platform in which the server is running. Defaults to Java.
     """
 
     endpoints = {
@@ -67,7 +66,7 @@ class Base:
         'icon': 'https://api.mcsrvstat.us/icon/'
     }
 
-    def __init__(self, address: str, platform: ServerPlatform=ServerPlatform.java) -> None:
+    def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.platform = platform
         self.address = address
 
@@ -98,14 +97,14 @@ class Server:
     Represents an instance of a Minecraft server.
 
     Parameters:
-        - address (`str`): The IP address / link used to join the server.\n
-        - platform (`ServerPlatform`): The platform in which the server is running. Defaults to Java.
+        `address: str` - The IP address / link used to join the server.\n
+        `platform: ServerPlatform` - The platform in which the server is running. Defaults to Java.
     """
 
-    def __init__(self, address: str, platform: ServerPlatform=ServerPlatform.java) -> None:
+    def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.base = Base(address=address, platform=platform)
 
-    def fetch_server_decor(type: int=1):
+    def fetch_server_decor(type: int = 1):
         def decorated(func):
             @wraps(func)
             async def wrapper(self):
@@ -189,7 +188,7 @@ class Server:
         Gives out a `ServerMOTD` object containing the server's MOTD in different types (clean, raw, HTML).
 
         Exceptions:
-        - `DataNotFoundError` - If the MOTD of the server is not found.
+            `DataNotFoundError` - If the MOTD of the server is not found.
         """
 
         try:
@@ -205,7 +204,7 @@ class Server:
         Gives out a `ServerInfo` object containing the server's base information (if any).
 
         Exceptions:
-        - `DataNotFoundError` - If the server information data is not found.
+            `DataNotFoundError` - If the server information data is not found.
         """
 
         try:
@@ -218,10 +217,11 @@ class Server:
     @fetch_server_decor
     def get_plugins(self, *args) -> ServerPlugins:
         """
-        Gives out a `ServerPlugins` object containing the names of the plugins that have been used in the development of the server.
+        Gives out a `ServerPlugins` object containing the names of the plugins 
+        that have been used in the development of the server.
 
         Exceptions:
-        - `DataNotFoundError` - If the data for installed plugins is not found.
+            `DataNotFoundError` - If the data for installed plugins is not found.
         """
 
         try:
@@ -237,7 +237,7 @@ class Server:
         Gives out a `ServerMods` object containing the names of active mods that are being used the server.
 
         Exceptions:
-        - `DataNotFoundError` - If the data for installed mods is not found.
+            `DataNotFoundError` - If the data for installed mods is not found.
         """
 
         try:
@@ -253,7 +253,7 @@ class Server:
         Gives out a `ServerSoftware` object containing the version and software information of the given server.
 
         Exceptions:
-        - `DataNotFoundError` - If the server software data is not found.
+            `DataNotFoundError` - If the server software data is not found.
         """
 
         try:
@@ -284,9 +284,12 @@ class Server:
     def get_player_by_name(self, *args, player_name: str) -> Player:
         """
         Gives out a `Player` object if a player is found active / online by the given name. 
+
+        Parameters:
+            `player_name: str` - The name of the player you wish to fetch.
         
         Exceptions:
-        - `DataNotFoundError` - If the player data is not found.
+            `DataNotFoundError` - If the player data is not found.
         """
 
         try:
@@ -303,7 +306,7 @@ class Server:
         Gives out a `ServerPlayerCount` object containing both the online and the max player count. 
         
         Exceptions:
-        - `DataNotFoundError` - If the player count data is not found.
+            `DataNotFoundError` - If the player count data is not found.
         """
         
         try:
@@ -317,7 +320,7 @@ class Server:
     @fetch_server_decor
     def get_players(self, *args) -> List[Player] | None:
         """
-        Gives out a list containing `Player` objects, each indicating an online player. 
+        Gives out a list containing `Player` objects, each indicating an online player.\n
         Returns `None` if no players are found.
         """
 

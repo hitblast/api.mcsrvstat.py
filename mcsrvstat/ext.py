@@ -50,12 +50,13 @@ class Icon:
     def __init__(self, data: bytes):
         self.data = data
 
-    def save(self, name: str='result') -> str:
+    def save(self, name: str = 'result') -> str:
         """
         Saves the icon on the local machine.
 
         Parameters:
-            name (`str`): The name to use for the new file (doesn't change the format of the image). Defaults to `result`.
+            name (`str`): The name to use for the new file (doesn't change the format of the image). 
+            Defaults to `result`.
 
         Returns: 
             The full name (with extension) of the file.

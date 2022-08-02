@@ -23,7 +23,6 @@ SOFTWARE.
 '''
 
 
-
 # Initialize all of the required files.
 from mcsrvstat.main import Server, Base
 from . import exceptions as exceptions, ext as ext
