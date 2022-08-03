@@ -47,7 +47,7 @@ def cli():
 @click.option('--save-icon', help='Downloads the icon of the server and saves it locally.', is_flag=True)
 def fetch(address: str, bedrock: bool, save_icon: bool):
     """Fetches the server data from the Minecraft Server Status API."""
-    
+
     platform = ServerPlatform.bedrock if bedrock else ServerPlatform.java
     base = Base(platform=platform, address=address)
     loop = asyncio.get_event_loop()

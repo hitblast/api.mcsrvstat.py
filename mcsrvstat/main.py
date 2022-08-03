@@ -74,7 +74,7 @@ class Base:
         """
         Returns an application/json value for the given server once invoked.
         """
-        
+
         if not isinstance(self.platform, ServerPlatform):
             raise InvalidServerTypeError
 
@@ -141,7 +141,7 @@ class Server:
 
         return args[0]['port']
 
-    @property 
+    @property
     @fetch_server_decor
     def hostname(self, *args) -> str:
         """
@@ -169,7 +169,7 @@ class Server:
         The default gamemode of the server. Returns `None` if it's a Java Edition server.
         """
 
-        try: 
+        try:
             return args[0]['gamemode']
         except KeyError:
             return None
@@ -179,7 +179,7 @@ class Server:
         """
         Gives out an `Icon` object containing the icon of the server.
         """
-        
+
         return Icon(args[0])
 
     @fetch_server_decor
@@ -213,11 +213,11 @@ class Server:
             raise DataNotFoundError('Failed to fetch server base information.')
         else:
             return ServerInfo(raw=info['raw'], clean=info['clean'], html=info['html'])
-    
+
     @fetch_server_decor
     def get_plugins(self, *args) -> ServerPlugins:
         """
-        Gives out a `ServerPlugins` object containing the names of the plugins 
+        Gives out a `ServerPlugins` object containing the names of the plugins
         that have been used in the development of the server.
 
         Exceptions:
@@ -279,15 +279,15 @@ class Server:
             cachetime=debug_values['cachetime'],
             apiversion=debug_values['apiversion']
         )
-        
+
     @fetch_server_decor
     def get_player_by_name(self, *args, player_name: str) -> Player:
         """
-        Gives out a `Player` object if a player is found active / online by the given name. 
+        Gives out a `Player` object if a player is found active / online by the given name.
 
         Parameters:
             `player_name: str` - The name of the player you wish to fetch.
-        
+
         Exceptions:
             `DataNotFoundError` - If the player data is not found.
         """
@@ -303,15 +303,15 @@ class Server:
     @fetch_server_decor
     def get_player_count(self, *args) -> ServerPlayerCount:
         """
-        Gives out a `ServerPlayerCount` object containing both the online and the max player count. 
-        
+        Gives out a `ServerPlayerCount` object containing both the online and the max player count.
+
         Exceptions:
             `DataNotFoundError` - If the player count data is not found.
         """
-        
+
         try:
             return ServerPlayerCount(
-                online=args[0]['players']['online'], 
+                online=args[0]['players']['online'],
                 max=args[0]['players']['max']
             )
         except KeyError:

@@ -36,7 +36,7 @@ from PIL import Image
 class ServerPlatform(Enum):
     java = '2/'
     bedrock = 'bedrock/2/'
-    
+
 
 # Classes.
 class Icon:
@@ -55,10 +55,10 @@ class Icon:
         Saves the icon on the local machine.
 
         Parameters:
-            name (`str`): The name to use for the new file (doesn't change the format of the image). 
+            name (`str`): The name to use for the new file (doesn't change the format of the image).
             Defaults to `result`.
 
-        Returns: 
+        Returns:
             The full name (with extension) of the file.
         """
 
@@ -117,7 +117,7 @@ class ServerInfo:
 
 
 @dataclass(frozen=True)
-class ServerPlugins: 
+class ServerPlugins:
     """
     The default class for accessing data on the server's plugins.
 
@@ -128,10 +128,10 @@ class ServerPlugins:
 
     names: list
     raw: list
-        
+
 
 @dataclass(frozen=True)
-class ServerMods: 
+class ServerMods:
     """
     The default class for accessing data on the server's mods.
 

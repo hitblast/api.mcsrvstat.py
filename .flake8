@@ -1,8 +1,5 @@
 [flake8]
 ignore = 
-    F401,
-    F403, 
-    F405,
-    W291,
-    W293
+    F403,
+    F405
 max-line-length = 120
