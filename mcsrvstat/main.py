@@ -24,7 +24,6 @@ SOFTWARE.
 
 
 # Import built-in modules.
-from functools import wraps
 from typing import Any, List
 
 # Import third-party modules.
@@ -104,21 +103,25 @@ class Server:
     def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.base = Base(address=address, platform=platform)
 
-    def fetch_server_decor(type: int = 1):
-        def decorated(func):
-            @wraps(func)
-            async def wrapper(self):
-                data = await self.base.fetch_server_icon() if type == 2 else self.base.fetch_server()
-                return func(self, data)
+    def fetch_server_decor(func):
+        async def wrapper(self):
+            data = await self.base.fetch_server()
+            return func(self, data)
 
-            return wrapper
-        return decorated
+        return wrapper
+
+    async def get_icon(self) -> Icon:
+        """
+        Gives out an `Icon` object containing the icon of the server.
+        """
+
+        return Icon(await self.base.fetch_server_icon())
 
     @property
     @fetch_server_decor
     def is_online(self, *args) -> bool:
         """
-        Returns a boolean value which indicates whether the server is online or not.
+        Returns a `bool` value which indicates whether the server is online or not.
         """
 
         return args[0]['online']
@@ -173,14 +176,6 @@ class Server:
             return args[0]['gamemode']
         except KeyError:
             return None
-
-    @fetch_server_decor(type=2)
-    def get_icon(self, *args) -> Icon:
-        """
-        Gives out an `Icon` object containing the icon of the server.
-        """
-
-        return Icon(args[0])
 
     @fetch_server_decor
     def get_motd(self, *args) -> ServerMOTD:
