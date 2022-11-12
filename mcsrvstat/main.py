@@ -60,10 +60,7 @@ class Base:
         `platform: ServerPlatform` - The platform in which the server is running. Defaults to Java.
     """
 
-    endpoints = {
-        'server': 'https://api.mcsrvstat.us/',
-        'icon': 'https://api.mcsrvstat.us/icon/'
-    }
+    endpoints = {'server': 'https://api.mcsrvstat.us/', 'icon': 'https://api.mcsrvstat.us/icon/'}
 
     def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.platform = platform
@@ -272,7 +269,7 @@ class Server:
             cnameinsrv=debug_values['cnameinsrv'],
             animatedmotd=debug_values['animatedmotd'],
             cachetime=debug_values['cachetime'],
-            apiversion=debug_values['apiversion']
+            apiversion=debug_values['apiversion'],
         )
 
     @fetch_server_decor
@@ -305,10 +302,7 @@ class Server:
         """
 
         try:
-            return ServerPlayerCount(
-                online=args[0]['players']['online'],
-                max=args[0]['players']['max']
-            )
+            return ServerPlayerCount(online=args[0]['players']['online'], max=args[0]['players']['max'])
         except KeyError:
             raise DataNotFoundError('Failed to fetch player count data.')
 
@@ -320,9 +314,7 @@ class Server:
         """
 
         try:
-            players = [
-                Player(name=name, uuid=uuid) for name, uuid in args[0]['players']['uuid'].items()
-            ]
+            players = [Player(name=name, uuid=uuid) for name, uuid in args[0]['players']['uuid'].items()]
             return players
 
         except KeyError:
