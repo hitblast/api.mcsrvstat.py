@@ -1,27 +1,28 @@
-name: Upload Python Package
+name: Release & Upload
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set up Python
+    - name: Set up Python 3
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
-    
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        pip install -U pip
         pip install build
-    
+
     - name: Build package
       run: python -m build
 
@@ -33,9 +34,8 @@ jobs:
         tag: ${{ github.ref }}
         overwrite: true
         file_glob: true
-
+      
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        user: ${{ secrets.PYPI_USERNAME }}
-        password: ${{ secrets.PYPI_PASSWORD }}
+        password: ${{ secrets.PYPI_API_TOKEN }}
