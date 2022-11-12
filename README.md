@@ -1,8 +1,8 @@
 # api.mcsrvstat.py
 An asynchronous Python wrapper for the [Minecraft Server Status API](https://api.mcsrvstat.us).
 
+[![Linting](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml/badge.svg)](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml)
 [![Downloads](https://pepy.tech/badge/api-mcsrvstat-py)](https://pepy.tech/project/api-mcsrvstat-py)
-![license](https://img.shields.io/github/license/hitblast/api.mcsrvstat.py?color=blue)
 ![Stars](https://img.shields.io/github/stars/hitblast/api.mcsrvstat.py?color=blue)
 ![Watchers](https://img.shields.io/github/watchers/hitblast/api.mcsrvstat.py?color=blue)
 <br><br>
