@@ -13,7 +13,7 @@ with codecs.open(os.path.join(here, 'requirements.txt'), encoding="utf-8") as f:
     lines = (x.strip() for x in f.read().splitlines())
     requirements = [x for x in lines if x and not x.startswith("#")]
 
-VERSION = '2022.8.9'
+VERSION = '2022.11.12'
 DESCRIPTION = 'An asynchronous Python wrapper for the Minecraft Server Status API.'
 
 # Setup.
@@ -28,16 +28,18 @@ setup(
     long_description=long_description,
     packages=find_packages(),
     install_requires=requirements,
-    python_requires='>=3.10',
+    python_requires='>=3.8',
     keywords=['python', 'minecraft', 'mcsrvstat'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
-        'Operating System :: Unix',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft :: Windows',
+        'Programming Language :: Python :: 3.11',
+        'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     entry_points='''
         [console_scripts]
