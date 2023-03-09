@@ -175,6 +175,7 @@ class ServerDebugInfo:
     cnameinsrv: bool
     animatedmotd: bool
     cachetime: int
+    cacheexpire: int
     apiversion: int
 
 

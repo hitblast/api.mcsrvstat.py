@@ -269,6 +269,7 @@ class Server:
             cnameinsrv=debug_values['cnameinsrv'],
             animatedmotd=debug_values['animatedmotd'],
             cachetime=debug_values['cachetime'],
+            cacheexpire=debug_values['cacheexpire'],
             apiversion=debug_values['apiversion'],
         )
 
