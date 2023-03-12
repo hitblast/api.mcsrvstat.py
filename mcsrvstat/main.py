@@ -286,8 +286,7 @@ class Server:
         """
 
         try:
-            uuid = args[0]['players']['uuid']
-            if player_name in uuid:
+            if player_name in (uuid := args[0]['players']['uuid']):
                 return Player(name=player_name, uuid=uuid[player_name])
 
         except KeyError:
@@ -315,8 +314,6 @@ class Server:
         """
 
         try:
-            players = [Player(name=name, uuid=uuid) for name, uuid in args[0]['players']['uuid'].items()]
-            return players
-
+            return [Player(name=name, uuid=uuid) for name, uuid in args[0]['players']['uuid'].items()]
         except KeyError:
             return None
