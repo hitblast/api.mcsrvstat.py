@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+
 # api.mcsrvstat.py
 An asynchronous Python wrapper for the [Minecraft Server Status API](https://api.mcsrvstat.us).
 
