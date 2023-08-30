@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+
+
 # Importing the required modules.
 from setuptools import setup, find_packages
 import codecs

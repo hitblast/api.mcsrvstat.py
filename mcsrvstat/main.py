@@ -24,7 +24,7 @@ SOFTWARE.
 
 
 # Import built-in modules.
-from typing import Any, List
+from typing import Any, List, Union
 
 # Import third-party modules.
 import aiohttp
@@ -35,7 +35,7 @@ from mcsrvstat.exceptions import *
 
 
 # The main coroutine for performing GET requests to the API.
-async def perform_get_request(endpoint: str) -> Any | bytes:
+async def perform_get_request(endpoint: str) -> Union[Any, bytes]:
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as request:
