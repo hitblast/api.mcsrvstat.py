@@ -1,4 +1,15 @@
+// SPDX-License-Identifier: MIT
 {
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": true,
+            "source.organizeImports.ruff": true
+        },
+        "editor.formatOnSave": true
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
