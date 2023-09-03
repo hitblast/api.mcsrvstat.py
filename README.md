@@ -1,27 +1,35 @@
 <!-- SPDX-License-Identifier: MIT -->
 
-# api.mcsrvstat.py
+<div align="center">
+
+# <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png" height="40px"/> api.mcsrvstat.py
+
 An asynchronous Python wrapper for the [Minecraft Server Status API](https://api.mcsrvstat.us).
 
-[![Linting](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml/badge.svg)](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml)
 [![Downloads](https://pepy.tech/badge/api-mcsrvstat-py)](https://pepy.tech/project/api-mcsrvstat-py)
 ![Stars](https://img.shields.io/github/stars/hitblast/api.mcsrvstat.py?color=blue)
 ![Watchers](https://img.shields.io/github/watchers/hitblast/api.mcsrvstat.py?color=blue)
-<br><br>
 
-## Installation / Upgrade
-As the library is very lightweight, the installation is also fairly easy with the minimum dependencies required.
+<br>
+
+| Checks | Status | 
+|:---|---:|
+| pretty code | [![Linting](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml/badge.svg)](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml) |
+| style enforcement | [![Formatting](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/formatting.yml/badge.svg)](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/formatting.yml) |
+
+</div>
+
+## Installation
+
 ```bash
-# macOS / Linux (could work on Windows)
-python3 -m pip install -U api.mcsrvstat.py
-
-# Windows (the primary way)
-py -3 -m pip install -U api.mcsrvstat.py
+# Install / upgrade.
+$ pip install -U api.mcsrvstat.py
 ```
 
 <br>
 
 ## Wiki & Usage
+
 In order to read about the different methods, extensions and use cases, check out [the GitHub Wiki page](https://github.com/hitblast/api.mcsrvstat.py/wiki/) of this library. There's nothing more important than reading documentations in terms of implementing a new library in your project!
 
 ---
@@ -29,30 +37,11 @@ In order to read about the different methods, extensions and use cases, check ou
 <br>
 
 ## Acknowledgements
-This project tends to wrap around [Anders G. Jørgensen's original mcsrvstat.us](https://mcsrvstat.us) project. Extending the usage aspects of his work and making it simpler for developers is the goal of it.
-<br><br>
 
-## [License](https://github.com/hitblast/api.mcsrvstat.py/blob/main/LICENSE)
-```
-MIT License
+- Thanks to Anders G. Jørgensen for making the original API behind this wrapper possible.
 
-Copyright (c) 2022 HitBlast
+<br>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## License
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+Licensed under the [MIT License](https://github.com/hitblast/avro.py/blob/main/LICENSE).
