@@ -1,1 +1,1 @@
-include LICENSE *.py *.md
+include LICENSE requirements.txt *.py *.md
