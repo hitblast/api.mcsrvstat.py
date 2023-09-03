@@ -2,9 +2,10 @@
 
 
 # Importing the required modules.
-from setuptools import setup, find_packages
 import codecs
 import os
+
+from setuptools import find_packages, setup
 
 # Defiining the setup parameters.
 here = os.path.abspath(os.path.dirname(__file__))
@@ -16,7 +17,7 @@ with codecs.open(os.path.join(here, 'requirements.txt'), encoding="utf-8") as f:
     lines = (x.strip() for x in f.read().splitlines())
     requirements = [x for x in lines if x and not x.startswith("#")]
 
-VERSION = '2023.3.12'
+VERSION = '2023.9.3'
 DESCRIPTION = 'An asynchronous Python wrapper for the Minecraft Server Status API.'
 
 # Setup.
