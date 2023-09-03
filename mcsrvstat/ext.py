@@ -152,6 +152,7 @@ class ServerDebugInfo:
     ipinsrv: bool
     cnameinsrv: bool
     animatedmotd: bool
+    cachehit: bool
     cachetime: int
     cacheexpire: int
     apiversion: int

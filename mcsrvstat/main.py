@@ -246,6 +246,7 @@ class Server:
             ipinsrv=debug_values['ipinsrv'],
             cnameinsrv=debug_values['cnameinsrv'],
             animatedmotd=debug_values['animatedmotd'],
+            cachehit=debug_values['cachehit'],
             cachetime=debug_values['cachetime'],
             cacheexpire=debug_values['cacheexpire'],
             apiversion=debug_values['apiversion'],
