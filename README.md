@@ -6,9 +6,9 @@
 
 An asynchronous Python wrapper for the [Minecraft Server Status API](https://api.mcsrvstat.us).
 
-[![Downloads](https://pepy.tech/badge/api-mcsrvstat-py)](https://pepy.tech/project/api-mcsrvstat-py)
-![Stars](https://img.shields.io/github/stars/hitblast/api.mcsrvstat.py?color=blue)
-![Watchers](https://img.shields.io/github/watchers/hitblast/api.mcsrvstat.py?color=blue)
+[![Downloads](https://static.pepy.tech/personalized-badge/api-mcsrvstat-py?period=total&units=international_system&left_color=grey&right_color=black&left_text=Downloads)](https://pepy.tech/project/api-mcsrvstat-py)
+![Python Version](https://img.shields.io/pypi/pyversions/api.mcsrvstat.py.svg?color=black&label=Python)
+![License](https://img.shields.io/pypi/l/api.mcsrvstat.py.svg?color=black&label=License)
 
 <br>
 
@@ -44,4 +44,4 @@ In order to read about the different methods, extensions and use cases, check ou
 
 ## License
 
-Licensed under the [MIT License](https://github.com/hitblast/avro.py/blob/main/LICENSE).
+Licensed under the [MIT License](https://github.com/hitblast/api.mcsrvstat.py/blob/main/LICENSE).
