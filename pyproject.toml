@@ -9,5 +9,6 @@ ignore = ["F403", "F405"]
 "mcsrvstat/__init__.py" = ["F401"]
 
 [tool.black]
+target-version = ["py38"]
 line-length = 120
 skip-string-normalization = true
