@@ -2,7 +2,7 @@
 
 
 # Import built-in modules.
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 # Import third-party modules.
 import aiohttp
@@ -286,7 +286,7 @@ class Server:
             raise DataNotFoundError('Failed to fetch player count data.')
 
     @fetch_server_decor
-    def get_players(self, *args) -> List[Player] | None:
+    def get_players(self, *args) -> Optional[List[Player]]:
         """
         Gives out a list containing `Player` objects, each indicating an online player.\n
         Returns `None` if no players are found.
