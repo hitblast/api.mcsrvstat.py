@@ -33,6 +33,10 @@ class Base:
     """
     The root class of the library for directly interacting with the API.
 
+    Caution:
+        - The direct usage of this class is not encouraged since this class supports no other
+        external wrapper classes and enforces full manual control.
+
     Parameters:
         `address: str` - The IP address / link used to join the server.\n
         `platform: ServerPlatform` - The platform in which the server is running. Defaults to Java.
@@ -43,8 +47,17 @@ class Base:
     def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.platform = platform
         self.address = address
+        self.data = None
+        self.data_icon = None
 
-    async def fetch_server(self) -> Any:
+    def check(self) -> None:
+        """
+        Checks if any of the two data types have been loaded to the state before.
+        """
+
+        ## still need to work on this one fr
+
+    async def fetch_server(self) -> None:
         """
         Returns an application/json value for the given server once invoked.
         """
@@ -53,16 +66,15 @@ class Base:
             raise InvalidServerTypeError
 
         url = self.endpoints['server'] + self.platform.value + self.address
-        return await perform_get_request(url)
+        self.data = await perform_get_request(url)
 
-    async def fetch_server_icon(self) -> Any:
+    async def fetch_server_icon(self) -> None:
         """
-        Returns an image which refers to the server's icon.
-        - The image is returned in `bytes`.
+        Returns an image (`bytes`) which refers to the server's icon.
         """
 
         url = self.endpoints['icon'] + self.address
-        return await perform_get_request(url)
+        self.data = await perform_get_request(url)
 
 
 # The Server class, which is the recommended class to use while interacting with the API.
@@ -84,6 +96,13 @@ class Server:
             return func(self, data)
 
         return wrapper
+
+    async def refresh(self) -> None:
+        """
+        Updates the Server instance with the latest data retrieved from the API.
+        """
+
+        ## still need to work on this one a lot, for now just created the function
 
     async def get_icon(self) -> Icon:
         """
