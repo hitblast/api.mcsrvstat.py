@@ -48,17 +48,8 @@ class Base:
     def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.platform = platform
         self.address = address
-        self.data = None
-        self.data_icon = None
 
-    def check(self) -> None:
-        """
-        Checks if any of the two data types have been loaded to the state before.
-        """
-
-        ## still need to work on this one fr
-
-    async def fetch_server(self) -> None:
+    async def fetch_server(self) -> Any:
         """
         Returns an application/json value for the given server once invoked.
         """
@@ -67,15 +58,15 @@ class Base:
             raise InvalidServerTypeError
 
         url = self.endpoints['server'] + self.platform.value + self.address
-        self.data = await perform_get_request(url)
+        return await perform_get_request(url)
 
-    async def fetch_server_icon(self) -> None:
+    async def fetch_server_icon(self) -> Any:
         """
         Returns an image (`bytes`) which refers to the server's icon.
         """
 
         url = self.endpoints['icon'] + self.address
-        self.data = await perform_get_request(url)
+        return await perform_get_request(url)
 
 
 # The Server class, which is the recommended class to use while interacting with the API.
@@ -90,14 +81,16 @@ class Server:
 
     def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.base = Base(address=address, platform=platform)
+        self.data = None
+        self.data_icon = None
 
     def precheck(func) -> Coroutine:
         """
-        The pre-check decorator to ensure that the data of the server has been loaded.
+        A redundancy decorator to ensure that the data of the server has been loaded.
         """
 
         async def wrapper(self: Server):
-            if not self.base.data or not self.base.data_icon:
+            if not self.data or not self.data_icon:
                 raise UnloadedError
             else:
                 return func(self)
@@ -109,7 +102,7 @@ class Server:
         Updates the Server instance with the latest data retrieved from the API.
         """
 
-        await asyncio.gather(self.base.fetch_server(), self.base.fetch_server_icon())
+        self.data, self.data_icon = await asyncio.gather(self.base.fetch_server(), self.base.fetch_server_icon())
 
     @property
     @precheck
@@ -127,7 +120,7 @@ class Server:
         The raw IP address of the server.
         """
 
-        return self.base.data['ip']
+        return self.data['ip']
 
     @property
     @precheck
@@ -136,7 +129,7 @@ class Server:
         The port used to enter the server.
         """
 
-        return self.base.data['port']
+        return self.data['port']
 
     @property
     @precheck
@@ -145,7 +138,7 @@ class Server:
         The hostname of the server.
         """
 
-        return self.base.data['hostname']
+        return self.data['hostname']
 
     @property
     @precheck
@@ -155,7 +148,7 @@ class Server:
         """
 
         try:
-            return self.base.data['serverid']
+            return self.data['serverid']
         except KeyError:
             return None
 
@@ -167,7 +160,7 @@ class Server:
         """
 
         try:
-            return self.base.data['gamemode']
+            return self.data['gamemode']
         except KeyError:
             return None
 
@@ -181,7 +174,7 @@ class Server:
         """
 
         try:
-            motd = self.base.data['motd']
+            motd = self.data['motd']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server MOTD.')
         else:
@@ -197,7 +190,7 @@ class Server:
         """
 
         try:
-            info = self.base.data['info']
+            info = self.data['info']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server base information.')
         else:
@@ -214,7 +207,7 @@ class Server:
         """
 
         try:
-            plugins = self.base.data['plugins']
+            plugins = self.data['plugins']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server plugin data.')
         else:
@@ -230,7 +223,7 @@ class Server:
         """
 
         try:
-            mods = self.base.data['mods']
+            mods = self.data['mods']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server mods data.')
         else:
@@ -246,7 +239,7 @@ class Server:
         """
 
         try:
-            return ServerSoftware(version=self.base.data['version'], software=self.base.data['software'])
+            return ServerSoftware(version=self.data['version'], software=self.data['software'])
         except KeyError:
             raise DataNotFoundError('Failed to fetch server software data.')
 
@@ -256,7 +249,7 @@ class Server:
         Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
         """
 
-        debug_values = self.base.data['debug']
+        debug_values = self.data['debug']
         return ServerDebugInfo(
             ping=debug_values['ping'],
             query=debug_values['query'],
@@ -284,7 +277,7 @@ class Server:
         """
 
         try:
-            if player_name in (uuid := self.base.data['players']['uuid']):
+            if player_name in (uuid := self.data['players']['uuid']):
                 return Player(name=player_name, uuid=uuid[player_name])
 
         except KeyError:
@@ -300,7 +293,7 @@ class Server:
         """
 
         try:
-            return ServerPlayerCount(online=self.base.data['players']['online'], max=self.base.data['players']['max'])
+            return ServerPlayerCount(online=self.data['players']['online'], max=self.data['players']['max'])
         except KeyError:
             raise DataNotFoundError('Failed to fetch player count data.')
 
@@ -312,6 +305,6 @@ class Server:
         """
 
         try:
-            return [Player(name=name, uuid=uuid) for name, uuid in self.base.data['players']['uuid'].items()]
+            return [Player(name=name, uuid=uuid) for name, uuid in self.data['players']['uuid'].items()]
         except KeyError:
             return None
