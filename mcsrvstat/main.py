@@ -39,7 +39,7 @@ class Base:
         external wrapper classes and enforces full manual control.
 
     Parameters:
-        `address: str` - The IP address / link used to join the server.\n
+        `address: str` - The IP address used to join the server.\n
         `platform: ServerPlatform` - The platform of the server. Defaults to Java edition.
     """
 
@@ -75,7 +75,7 @@ class Server:
     Represents an instance of a Minecraft server.
 
     Parameters:
-        `address: str` - The IP address / link used to join the server.\n
+        `address: str` - The IP address used to join the server.\n
         `platform: ServerPlatform` - The platform of the server. Defaults to Java edition.
     """
 
@@ -97,12 +97,15 @@ class Server:
 
         return wrapper
 
-    async def refresh(self) -> None:
+    async def fetch(self) -> None:
         """
-        Updates the Server instance with the latest data retrieved from the API.
+        Performs the required requests to the Minecraft Server Status API and loads the fetched data to the class instance.
         """
 
-        self.data, self.data_icon = await asyncio.gather(self.base.fetch_server(), self.base.fetch_server_icon())
+        try:
+            self.data, self.data_icon = await asyncio.gather(self.base.fetch_server(), self.base.fetch_server_icon())
+        except Exception:
+            pass  # FIXME: just for demonstration right here (testing purposes)
 
     @property
     @precheck
@@ -144,7 +147,7 @@ class Server:
     @precheck
     def id(self) -> str:
         """
-        The ID of the server. Returns `None` if it's a Java Edition server.
+        The ID of the server. (`None` if Java Edition)
         """
 
         try:
@@ -156,7 +159,7 @@ class Server:
     @precheck
     def gamemode(self) -> str:
         """
-        The default gamemode of the server. Returns `None` if it's a Java Edition server.
+        The default gamemode of the server. (`None` if Java Edition)
         """
 
         try:
