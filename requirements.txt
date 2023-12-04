@@ -1,4 +1,4 @@
 # SPDX-License-Identifier: MIT
 
-aiohttp==3.8.5
-Pillow==10.0.0
+aiohttp==3.9.1
+Pillow==10.1.0
