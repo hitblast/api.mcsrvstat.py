@@ -2,7 +2,8 @@
 
 
 # Import built-in modules.
-from typing import Any, List, Optional, Union
+import asyncio
+from typing import Any, Coroutine, List, Optional, Union
 
 # Import third-party modules.
 import aiohttp
@@ -39,7 +40,7 @@ class Base:
 
     Parameters:
         `address: str` - The IP address / link used to join the server.\n
-        `platform: ServerPlatform` - The platform in which the server is running. Defaults to Java.
+        `platform: ServerPlatform` - The platform of the server. Defaults to Java edition.
     """
 
     endpoints = {'server': 'https://api.mcsrvstat.us/', 'icon': 'https://api.mcsrvstat.us/icon/'}
@@ -84,16 +85,22 @@ class Server:
 
     Parameters:
         `address: str` - The IP address / link used to join the server.\n
-        `platform: ServerPlatform` - The platform in which the server is running. Defaults to Java.
+        `platform: ServerPlatform` - The platform of the server. Defaults to Java edition.
     """
 
     def __init__(self, address: str, platform: ServerPlatform = ServerPlatform.java) -> None:
         self.base = Base(address=address, platform=platform)
 
-    def fetch_server_decor(func):
-        async def wrapper(self):
-            data = await self.base.fetch_server()
-            return func(self, data)
+    def precheck(func) -> Coroutine:
+        """
+        The pre-check decorator to ensure that the data of the server has been loaded.
+        """
+
+        async def wrapper(self: Server):
+            if not self.base.data or not self.base.data_icon:
+                raise UnloadedError
+            else:
+                return func(self)
 
         return wrapper
 
@@ -102,77 +109,70 @@ class Server:
         Updates the Server instance with the latest data retrieved from the API.
         """
 
-        ## still need to work on this one a lot, for now just created the function
-
-    async def get_icon(self) -> Icon:
-        """
-        Gives out an `Icon` object containing the icon of the server.
-        """
-
-        return Icon(await self.base.fetch_server_icon())
+        await asyncio.gather(self.base.fetch_server(), self.base.fetch_server_icon())
 
     @property
-    @fetch_server_decor
-    def is_online(self, *args) -> bool:
+    @precheck
+    def is_online(self) -> bool:
         """
         Returns a `bool` value which indicates whether the server is online or not.
         """
 
-        return args[0]['online']
+        return self.data['online']
 
     @property
-    @fetch_server_decor
-    def ip(self, *args) -> str:
+    @precheck
+    def ip(self) -> str:
         """
         The raw IP address of the server.
         """
 
-        return args[0]['ip']
+        return self.base.data['ip']
 
     @property
-    @fetch_server_decor
-    def port(self, *args) -> int:
+    @precheck
+    def port(self) -> int:
         """
         The port used to enter the server.
         """
 
-        return args[0]['port']
+        return self.base.data['port']
 
     @property
-    @fetch_server_decor
-    def hostname(self, *args) -> str:
+    @precheck
+    def hostname(self) -> str:
         """
         The hostname of the server.
         """
 
-        return args[0]['hostname']
+        return self.base.data['hostname']
 
     @property
-    @fetch_server_decor
-    def id(self, *args) -> str:
+    @precheck
+    def id(self) -> str:
         """
         The ID of the server. Returns `None` if it's a Java Edition server.
         """
 
         try:
-            return args[0]['serverid']
+            return self.base.data['serverid']
         except KeyError:
             return None
 
     @property
-    @fetch_server_decor
-    def gamemode(self, *args) -> str:
+    @precheck
+    def gamemode(self) -> str:
         """
         The default gamemode of the server. Returns `None` if it's a Java Edition server.
         """
 
         try:
-            return args[0]['gamemode']
+            return self.base.data['gamemode']
         except KeyError:
             return None
 
-    @fetch_server_decor
-    def get_motd(self, *args) -> ServerMOTD:
+    @precheck
+    def get_motd(self) -> ServerMOTD:
         """
         Gives out a `ServerMOTD` object containing the server's MOTD in different types (clean, raw, HTML).
 
@@ -181,14 +181,14 @@ class Server:
         """
 
         try:
-            motd = args[0]['motd']
+            motd = self.base.data['motd']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server MOTD.')
         else:
             return ServerMOTD(raw=motd['raw'], clean=motd['clean'], html=motd['html'])
 
-    @fetch_server_decor
-    def get_info(self, *args) -> ServerInfo:
+    @precheck
+    def get_info(self) -> ServerInfo:
         """
         Gives out a `ServerInfo` object containing the server's base information (if any).
 
@@ -197,14 +197,14 @@ class Server:
         """
 
         try:
-            info = args[0]['info']
+            info = self.base.data['info']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server base information.')
         else:
             return ServerInfo(raw=info['raw'], clean=info['clean'], html=info['html'])
 
-    @fetch_server_decor
-    def get_plugins(self, *args) -> ServerPlugins:
+    @precheck
+    def get_plugins(self) -> ServerPlugins:
         """
         Gives out a `ServerPlugins` object containing the names of the plugins
         that have been used in the development of the server.
@@ -214,14 +214,14 @@ class Server:
         """
 
         try:
-            plugins = args[0]['plugins']
+            plugins = self.base.data['plugins']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server plugin data.')
         else:
             return ServerPlugins(names=plugins['names'], raw=plugins['raw'])
 
-    @fetch_server_decor
-    def get_mods(self, *args) -> ServerMods:
+    @precheck
+    def get_mods(self) -> ServerMods:
         """
         Gives out a `ServerMods` object containing the names of active mods that are being used the server.
 
@@ -230,14 +230,14 @@ class Server:
         """
 
         try:
-            mods = args[0]['mods']
+            mods = self.base.data['mods']
         except KeyError:
             raise DataNotFoundError('Failed to fetch server mods data.')
         else:
             return ServerPlugins(names=mods['names'], raw=mods['raw'])
 
-    @fetch_server_decor
-    def get_software(self, *args) -> ServerSoftware:
+    @precheck
+    def get_software(self) -> ServerSoftware:
         """
         Gives out a `ServerSoftware` object containing the version and software information of the given server.
 
@@ -246,17 +246,17 @@ class Server:
         """
 
         try:
-            return ServerSoftware(version=args[0]['version'], software=args[0]['software'])
+            return ServerSoftware(version=self.base.data['version'], software=self.base.data['software'])
         except KeyError:
             raise DataNotFoundError('Failed to fetch server software data.')
 
-    @fetch_server_decor
-    def get_debug_values(self, *args) -> ServerDebugInfo:
+    @precheck
+    def get_debug_values(self) -> ServerDebugInfo:
         """
         Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
         """
 
-        debug_values = args[0]['debug']
+        debug_values = self.base.data['debug']
         return ServerDebugInfo(
             ping=debug_values['ping'],
             query=debug_values['query'],
@@ -271,8 +271,8 @@ class Server:
             apiversion=debug_values['apiversion'],
         )
 
-    @fetch_server_decor
-    def get_player_by_name(self, *args, player_name: str) -> Player:
+    @precheck
+    def get_player_by_name(self, player_name: str) -> Player:
         """
         Gives out a `Player` object if a player is found active / online by the given name.
 
@@ -284,14 +284,14 @@ class Server:
         """
 
         try:
-            if player_name in (uuid := args[0]['players']['uuid']):
+            if player_name in (uuid := self.base.data['players']['uuid']):
                 return Player(name=player_name, uuid=uuid[player_name])
 
         except KeyError:
             raise DataNotFoundError('Failed to fetch player data.')
 
-    @fetch_server_decor
-    def get_player_count(self, *args) -> ServerPlayerCount:
+    @precheck
+    def get_player_count(self) -> ServerPlayerCount:
         """
         Gives out a `ServerPlayerCount` object containing both the online and the max player count.
 
@@ -300,18 +300,18 @@ class Server:
         """
 
         try:
-            return ServerPlayerCount(online=args[0]['players']['online'], max=args[0]['players']['max'])
+            return ServerPlayerCount(online=self.base.data['players']['online'], max=self.base.data['players']['max'])
         except KeyError:
             raise DataNotFoundError('Failed to fetch player count data.')
 
-    @fetch_server_decor
-    def get_players(self, *args) -> Optional[List[Player]]:
+    @precheck
+    def get_players(self) -> Optional[List[Player]]:
         """
         Gives out a list containing `Player` objects, each indicating an online player.\n
         Returns `None` if no players are found.
         """
 
         try:
-            return [Player(name=name, uuid=uuid) for name, uuid in args[0]['players']['uuid'].items()]
+            return [Player(name=name, uuid=uuid) for name, uuid in self.base.data['players']['uuid'].items()]
         except KeyError:
             return None

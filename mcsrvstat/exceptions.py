@@ -12,6 +12,11 @@ class UnstableInternetError(Exception):
         return 'You must have a stable internet connection before proceeding to use the library.'
 
 
+class UnloadedError(Exception):
+    def __str__(self) -> str:
+        return 'Fetch the required data with the refresh() coroutine first.'
+
+
 class DataNotFoundError(Exception):
     def __init__(self, data_type: str) -> None:
         self.data_type = data_type
