@@ -3,7 +3,7 @@
 
 # Import built-in modules.
 import asyncio
-from typing import Any, Coroutine, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 # Import third-party modules.
 import aiohttp
@@ -78,16 +78,16 @@ class Server:
         self.data = None
         self.data_icon = None
 
-    def precheck(func) -> Coroutine:
+    def precheck(func):
         """
         A redundancy decorator to ensure that the data of the server has been loaded.
         """
 
-        async def wrapper(self: Server):
+        def wrapper(self, *args, **kwargs):
             if not self.data or not self.data_icon:
                 raise UnloadedError
             else:
-                return func(self)
+                return func(self, *args, **kwargs)
 
         return wrapper
 
@@ -273,13 +273,12 @@ class Server:
             `DataNotFoundError` - If the player data is not found.
         """
 
-        try:
-            for player in self.data['players']['list']:
-                if player['name'] == player_name:
-                    return Player(name=player_name, uuid=player['uuid'])
+        player = next((p for p in self.data['players']['list'] if p['name'] == player_name), None)
 
-        except KeyError:
+        if not player:
             raise DataNotFoundError('Failed to fetch player data.')
+        else:
+            return Player(name=player['name'], uuid=player['uuid'])
 
     @precheck
     def get_player_count(self) -> ServerPlayerCount:
