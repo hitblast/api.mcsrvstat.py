@@ -114,7 +114,7 @@ class Server:
     @precheck
     def ip(self) -> str:
         """
-        The raw IP address of the server.
+        The IP address of the server.
         """
 
         return self.data['ip']
@@ -136,27 +136,6 @@ class Server:
         """
 
         return self.data['hostname']
-
-    @precheck
-    def get_debug_values(self) -> ServerDebugInfo:
-        """
-        Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
-        """
-
-        debug_values = self.data['debug']
-        return ServerDebugInfo(
-            ping=debug_values['ping'],
-            query=debug_values['query'],
-            srv=debug_values['srv'],
-            querymismatch=debug_values['querymismatch'],
-            ipinsrv=debug_values['ipinsrv'],
-            cnameinsrv=debug_values['cnameinsrv'],
-            animatedmotd=debug_values['animatedmotd'],
-            cachehit=debug_values['cachehit'],
-            cachetime=debug_values['cachetime'],
-            cacheexpire=debug_values['cacheexpire'],
-            apiversion=debug_values['apiversion'],
-        )
 
     @property
     @precheck
@@ -181,6 +160,27 @@ class Server:
             return self.data['gamemode']
         except KeyError:
             return None
+
+    @precheck
+    def get_debug_values(self) -> ServerDebugInfo:
+        """
+        Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
+        """
+
+        debug_values = self.data['debug']
+        return ServerDebugInfo(
+            ping=debug_values['ping'],
+            query=debug_values['query'],
+            srv=debug_values['srv'],
+            querymismatch=debug_values['querymismatch'],
+            ipinsrv=debug_values['ipinsrv'],
+            cnameinsrv=debug_values['cnameinsrv'],
+            animatedmotd=debug_values['animatedmotd'],
+            cachehit=debug_values['cachehit'],
+            cachetime=debug_values['cachetime'],
+            cacheexpire=debug_values['cacheexpire'],
+            apiversion=debug_values['apiversion'],
+        )
 
     @precheck
     def get_motd(self) -> ServerMOTD:
