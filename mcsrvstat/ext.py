@@ -51,7 +51,7 @@ class Icon:
 @dataclass(frozen=True)
 class Player:
     """
-    Represents a player from a Minecraft server.
+    Represents a player from the server.
 
     Attributes:
         `name` - The friendly name of the player.\n
@@ -65,7 +65,7 @@ class Player:
 @dataclass(frozen=True)
 class ServerMOTD:
     """
-    Represents the 'Message of the Day' or 'MOTD'
+    Represents the 'Message of the Day' or 'MOTD' of the server.
 
     Attributes:
         `raw` - No formatting, get the raw one.\n
@@ -73,9 +73,9 @@ class ServerMOTD:
         `html` - Retrieve the MOTD in HTML.
     """
 
-    raw: list
-    clean: list
-    html: list
+    raw: str
+    clean: str
+    html: str
 
 
 @dataclass(frozen=True)
@@ -95,45 +95,31 @@ class ServerInfo:
 
 
 @dataclass(frozen=True)
-class ServerPlugins:
+class ServerPlugin:
     """
-    The default class for accessing data on the server's plugins.
+    Represents a server plugin.
 
     Attributes:
-        `names` - Formatted names of the used plugins.\n
-        `raw` - No formatting, get the raw ones.
+        `name` - The name of the plugin.\n
+        `version` - The version of the plugin.
     """
 
-    names: list
-    raw: list
-
-
-@dataclass(frozen=True)
-class ServerMods:
-    """
-    The default class for accessing data on the server's mods.
-
-    Attributes:
-        `names` - Formatted names of the used plugins.\n
-        `raw` - No formatting, get the raw ones.
-    """
-
-    names: list
-    raw: list
-
-
-@dataclass(frozen=True)
-class ServerSoftware:
-    """
-    The default class for accessing server software and version information.
-
-    Attributes:
-        `version` - The version of the backend used by the server.\n
-        `software` - The software / vendor name.'
-    """
-
+    name: str
     version: str
-    software: str
+
+
+@dataclass(frozen=True)
+class ServerMod:
+    """
+    Represents a server mod.
+
+    Attributes:
+        `name` - The name of the mod.\n
+        `version` - The version of the mod.
+    """
+
+    name: str
+    version: str
 
 
 @dataclass(frozen=True)
@@ -159,9 +145,9 @@ class ServerDebugInfo:
 
 
 @dataclass(frozen=True)
-class ServerPlayerCount:
+class PlayerCount:
     """
-    The default class for accessing server player count.
+    Represents the current player count of the server.
 
     Attributes:
         `online` - The amount of players currently online.\n
