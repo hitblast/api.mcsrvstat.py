@@ -137,6 +137,27 @@ class Server:
 
         return self.data['hostname']
 
+    @precheck
+    def get_debug_values(self) -> ServerDebugInfo:
+        """
+        Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
+        """
+
+        debug_values = self.data['debug']
+        return ServerDebugInfo(
+            ping=debug_values['ping'],
+            query=debug_values['query'],
+            srv=debug_values['srv'],
+            querymismatch=debug_values['querymismatch'],
+            ipinsrv=debug_values['ipinsrv'],
+            cnameinsrv=debug_values['cnameinsrv'],
+            animatedmotd=debug_values['animatedmotd'],
+            cachehit=debug_values['cachehit'],
+            cachetime=debug_values['cachetime'],
+            cacheexpire=debug_values['cacheexpire'],
+            apiversion=debug_values['apiversion'],
+        )
+
     @property
     @precheck
     def id(self) -> str:
@@ -164,7 +185,7 @@ class Server:
     @precheck
     def get_motd(self) -> ServerMOTD:
         """
-        Gives out a `ServerMOTD` object containing the server's MOTD in different types (clean, raw, HTML).
+        Gives out a `ServerMOTD` object containing the server's MOTD in different string types (clean, raw, HTML).
 
         Exceptions:
             `DataNotFoundError` - If the MOTD of the server is not found.
@@ -178,93 +199,9 @@ class Server:
             return ServerMOTD(raw=motd['raw'], clean=motd['clean'], html=motd['html'])
 
     @precheck
-    def get_info(self) -> ServerInfo:
-        """
-        Gives out a `ServerInfo` object containing the server's base information (if any).
-
-        Exceptions:
-            `DataNotFoundError` - If the server information data is not found.
-        """
-
-        try:
-            info = self.data['info']
-        except KeyError:
-            raise DataNotFoundError('Failed to fetch server base information.')
-        else:
-            return ServerInfo(raw=info['raw'], clean=info['clean'], html=info['html'])
-
-    @precheck
-    def get_plugins(self) -> ServerPlugins:
-        """
-        Gives out a `ServerPlugins` object containing the names of the plugins
-        that have been used in the development of the server.
-
-        Exceptions:
-            `DataNotFoundError` - If the data for installed plugins is not found.
-        """
-
-        try:
-            plugins = self.data['plugins']
-        except KeyError:
-            raise DataNotFoundError('Failed to fetch server plugin data.')
-        else:
-            return ServerPlugins(names=plugins['names'], raw=plugins['raw'])
-
-    @precheck
-    def get_mods(self) -> ServerMods:
-        """
-        Gives out a `ServerMods` object containing the names of active mods that are being used the server.
-
-        Exceptions:
-            `DataNotFoundError` - If the data for installed mods is not found.
-        """
-
-        try:
-            mods = self.data['mods']
-        except KeyError:
-            raise DataNotFoundError('Failed to fetch server mods data.')
-        else:
-            return ServerPlugins(names=mods['names'], raw=mods['raw'])
-
-    @precheck
-    def get_software(self) -> ServerSoftware:
-        """
-        Gives out a `ServerSoftware` object containing the version and software information of the given server.
-
-        Exceptions:
-            `DataNotFoundError` - If the server software data is not found.
-        """
-
-        try:
-            return ServerSoftware(version=self.data['version'], software=self.data['software'])
-        except KeyError:
-            raise DataNotFoundError('Failed to fetch server software data.')
-
-    @precheck
-    def get_debug_values(self) -> ServerDebugInfo:
-        """
-        Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
-        """
-
-        debug_values = self.data['debug']
-        return ServerDebugInfo(
-            ping=debug_values['ping'],
-            query=debug_values['query'],
-            srv=debug_values['srv'],
-            querymismatch=debug_values['querymismatch'],
-            ipinsrv=debug_values['ipinsrv'],
-            cnameinsrv=debug_values['cnameinsrv'],
-            animatedmotd=debug_values['animatedmotd'],
-            cachehit=debug_values['cachehit'],
-            cachetime=debug_values['cachetime'],
-            cacheexpire=debug_values['cacheexpire'],
-            apiversion=debug_values['apiversion'],
-        )
-
-    @precheck
     def get_player_by_name(self, player_name: str) -> Player:
         """
-        Gives out a `Player` object if a player is found active / online by the given name.
+        Gives out a `Player` object representing a player currently playing on the Minecraft server.
 
         Parameters:
             `player_name: str` - The name of the player you wish to fetch.
@@ -281,16 +218,16 @@ class Server:
             return Player(name=player['name'], uuid=player['uuid'])
 
     @precheck
-    def get_player_count(self) -> ServerPlayerCount:
+    def get_player_count(self) -> PlayerCount:
         """
-        Gives out a `ServerPlayerCount` object containing both the online and the max player count.
+        Gives out a `PlayerCount` object, representing the active player count of the Minecraft server.
 
         Exceptions:
             `DataNotFoundError` - If the player count data is not found.
         """
 
         try:
-            return ServerPlayerCount(online=self.data['players']['online'], max=self.data['players']['max'])
+            return PlayerCount(online=self.data['players']['online'], max=self.data['players']['max'])
         except KeyError:
             raise DataNotFoundError('Failed to fetch player count data.')
 
@@ -305,3 +242,43 @@ class Server:
             return [Player(name=name, uuid=uuid) for name, uuid in self.data['players']['list'].items()]
         except KeyError:
             return None
+
+    @precheck
+    def get_plugins(self) -> Optional[List[ServerPlugin]]:
+        """
+        Gives out a list of `ServerPlugin` objects, each representing a plugin used on the Minecraft server.
+        Returns `None` if not detected.
+        """
+
+        try:
+            return [ServerPlugin(name=name, version=version) for name, version in self.data['plugins'].items()]
+        except KeyError:
+            return None
+
+    @precheck
+    def get_mods(self) -> Optional[List[ServerMod]]:
+        """
+        Gives out a list of `ServerMod` objects, each representing a mod used on the Minecraft server.
+        Returns `None` if not detected.
+        """
+
+        try:
+            return [ServerMod(name=name, version=version) for name, version in self.data['mods'].items()]
+        except KeyError:
+            return None
+
+    @precheck
+    def get_info(self) -> ServerInfo:
+        """
+        Gives out a `ServerInfo` object containing the server's base information (if any).
+
+        Exceptions:
+            `DataNotFoundError` - If the server information data is not found.
+        """
+
+        try:
+            info = self.data['info']
+        except KeyError:
+            raise DataNotFoundError('Failed to fetch server base information.')
+        else:
+            return ServerInfo(raw=info['raw'], clean=info['clean'], html=info['html'])
