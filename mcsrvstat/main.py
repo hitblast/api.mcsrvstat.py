@@ -13,22 +13,6 @@ from mcsrvstat.exceptions import *
 from mcsrvstat.ext import *
 
 
-# The main coroutine for performing GET requests to the API.
-async def perform_get_request(endpoint: str) -> Union[Any, bytes]:
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(endpoint) as request:
-                if request.status != 200:
-                    raise DataNotFoundError('Request status not OK (failed).')
-                elif request.headers['Content-Type'] == 'image/png':
-                    return await request.read()
-                else:
-                    return await request.json()
-
-    except aiohttp.ClientConnectionError:
-        raise UnstableInternetError
-
-
 # The Base class, which does all the hard work for the Stats class.
 class Base:
     """
@@ -49,24 +33,34 @@ class Base:
         self.platform = platform
         self.address = address
 
-    async def fetch_server(self) -> Any:
-        """
-        Returns an application/json value for the given server once invoked.
-        """
+    # The primary static method for performing API requests.
+    @staticmethod
+    async def perform_get_request(endpoint: str) -> Union[Any, bytes]:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(endpoint) as request:
+                    if request.status != 200:
+                        raise DataNotFoundError('Request status not OK (failed).')
+                    elif request.headers['Content-Type'] == 'image/png':
+                        return await request.read()
+                    else:
+                        return await request.json()
 
+        except aiohttp.ClientConnectionError:
+            raise UnstableInternetError
+
+    # Performs a GET request to the API for loading the server data.
+    async def fetch(self) -> Any:
         if not isinstance(self.platform, ServerPlatform):
             raise InvalidServerTypeError
 
         url = self.endpoints['server'] + self.platform.value + self.address
-        return await perform_get_request(url)
+        return await self.perform_get_request(url)
 
-    async def fetch_server_icon(self) -> Any:
-        """
-        Returns an image (`bytes`) which refers to the server's icon.
-        """
-
+    # Basically fetch() but modified for getting a server's icon.
+    async def fetch_icon(self) -> Any:
         url = self.endpoints['icon'] + self.address
-        return await perform_get_request(url)
+        return await self.perform_get_request(url)
 
 
 # The Server class, which is the recommended class to use while interacting with the API.
@@ -103,7 +97,7 @@ class Server:
         """
 
         try:
-            self.data, self.data_icon = await asyncio.gather(self.base.fetch_server(), self.base.fetch_server_icon())
+            self.data, self.data_icon = await asyncio.gather(self.base.fetch(), self.base.fetch_icon())
         except Exception:
             pass  # FIXME: just for demonstration right here (testing purposes)
 
