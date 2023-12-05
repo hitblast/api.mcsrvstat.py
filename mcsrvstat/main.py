@@ -35,7 +35,7 @@ class Base:
 
     # The primary static method for performing API requests.
     @staticmethod
-    async def perform_get_request(endpoint: str) -> Union[Any, bytes]:
+    async def _perform_req(endpoint: str) -> Union[Any, bytes]:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(endpoint) as request:
@@ -55,12 +55,12 @@ class Base:
             raise InvalidServerTypeError
 
         url = self.endpoints['server'] + self.platform.value + self.address
-        return await self.perform_get_request(url)
+        return await self._perform_req(url)
 
     # Basically fetch() but modified for getting a server's icon.
-    async def fetch_icon(self) -> Any:
+    async def fetch_icon(self) -> bytes:
         url = self.endpoints['icon'] + self.address
-        return await self.perform_get_request(url)
+        return await self._perform_req(url)
 
 
 # The Server class, which is the recommended class to use while interacting with the API.
@@ -117,7 +117,7 @@ class Server:
     @_precheck
     def is_online(self) -> bool:
         """
-        Returns a boolean indicating whether the server is online or not.
+        Returns a boolean indicating whether the Minecraft server is online or not.
         """
         return self.data['online']
 
@@ -125,7 +125,7 @@ class Server:
     @_precheck
     def ip(self) -> str:
         """
-        The IP address of the server.
+        The IP address of the Minecraft server.
         """
         return self.data['ip']
 
@@ -133,7 +133,7 @@ class Server:
     @_precheck
     def port(self) -> int:
         """
-        The port used to enter the server.
+        The port used to enter the Minecraft server.
         """
         return self.data['port']
 
@@ -141,7 +141,7 @@ class Server:
     @_precheck
     def hostname(self) -> str:
         """
-        The hostname of the server.
+        The hostname of the Minecraft server.
         """
         return self.data['hostname']
 
@@ -149,7 +149,7 @@ class Server:
     @_precheck
     def id(self) -> Optional[str]:
         """
-        The ID of the server. (`None` if Java Edition)
+        The ID of the Minecraft server. (`None` if Java Edition)
         """
         return self._get_basic_key('serverid')
 
@@ -157,7 +157,7 @@ class Server:
     @_precheck
     def gamemode(self) -> Optional[str]:
         """
-        The default gamemode of the server. (`None` if Java Edition)
+        The default gamemode of the Minecraft server. (`None` if Java Edition)
         """
         return self._get_basic_key('gamemode')
 
@@ -165,7 +165,7 @@ class Server:
     @_precheck
     def is_eula_blocked(self) -> Optional[bool]:
         """
-        Returns a boolean indicating if EULA policy is blocked on the server. (`None` if Bedrock edition)
+        Returns a boolean indicating if EULA policy is blocked on the Minecraft server. (`None` if Bedrock edition)
         """
         return self._get_basic_key('eula_blocked')
 
@@ -181,14 +181,14 @@ class Server:
     @_precheck
     def software(self) -> Optional[str]:
         """
-        The software used as the backend of the server. (`None` if not detected)
+        The software used as the backend of the Minecraft server. (`None` if not detected)
         """
         return self._get_basic_key('software')
 
     @_precheck
     def get_debug_values(self) -> ServerDebugInfo:
         """
-        Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
+        Returns a `ServerDebugInfo` object containing the debug values of the Minecraft server.
         """
 
         debug_values = self.data['debug']
@@ -209,10 +209,11 @@ class Server:
     @_precheck
     def get_motd(self) -> ServerMOTD:
         """
-        Gives out a `ServerMOTD` object containing the server's MOTD in different string types (clean, raw, HTML).
+        Returns a `ServerMOTD` object.
+        It contains the server's "Message Of The Day" in three string types.
 
         Exceptions:
-            `DataNotFoundError` - If the MOTD of the server is not found.
+            `DataNotFoundError` - If an MOTD is not found.
         """
 
         try:
@@ -225,7 +226,7 @@ class Server:
     @_precheck
     def get_player(self, name: str) -> Player:
         """
-        Gives out a `Player` object representing a player currently playing on the Minecraft server.
+        Returns a `Player` object representing a player currently playing on the Minecraft server.
 
         Parameters:
             `player_name: str` - The name of the player you wish to fetch.
@@ -256,7 +257,7 @@ class Server:
     @_precheck
     def get_player_count(self) -> PlayerCount:
         """
-        Gives out a `PlayerCount` object, representing the active player count of the Minecraft server.
+        Returns a `PlayerCount` object, representing the active player count of the Minecraft server.
 
         Exceptions:
             `DataNotFoundError` - If the player count data is not found.
@@ -294,7 +295,7 @@ class Server:
     @_precheck
     def get_info(self) -> ServerInfo:
         """
-        Gives out a `ServerInfo` object containing the server's base information (if any).
+        Returns a `ServerInfo` object containing the server's base information (if any).
 
         Exceptions:
             `DataNotFoundError` - If the server information data is not found.
