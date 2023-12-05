@@ -12,8 +12,8 @@ from PIL import Image
 
 # Enums.
 class ServerPlatform(Enum):
-    java = '2/'
-    bedrock = 'bedrock/2/'
+    java = '3/'
+    bedrock = 'bedrock/3/'
 
 
 # Classes.

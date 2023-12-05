@@ -274,8 +274,9 @@ class Server:
         """
 
         try:
-            if player_name in (uuid := self.data['players']['uuid']):
-                return Player(name=player_name, uuid=uuid[player_name])
+            for player in self.data['players']['list']:
+                if player['name'] == player_name:
+                    return Player(name=player_name, uuid=player['uuid'])
 
         except KeyError:
             raise DataNotFoundError('Failed to fetch player data.')
@@ -302,6 +303,6 @@ class Server:
         """
 
         try:
-            return [Player(name=name, uuid=uuid) for name, uuid in self.data['players']['uuid'].items()]
+            return [Player(name=name, uuid=uuid) for name, uuid in self.data['players']['list'].items()]
         except KeyError:
             return None
