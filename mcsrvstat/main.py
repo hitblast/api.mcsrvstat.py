@@ -78,7 +78,7 @@ class Server:
         self.data = None
         self.data_icon = None
 
-    def precheck(func):
+    def _precheck(func):
         """
         A redundancy decorator to ensure that the data of the server has been loaded.
         """
@@ -91,6 +91,16 @@ class Server:
 
         return wrapper
 
+    def _get_basic_key(self, key: str) -> Optional[Any]:
+        """
+        Acts as boilerplate for fetching keys without repeating too much.
+        """
+
+        try:
+            return self.data[key]
+        except KeyError:
+            return None
+
     async def fetch(self) -> None:
         """
         Performs the required requests to the Minecraft Server Status API and loads the fetched data to the class instance.
@@ -101,67 +111,81 @@ class Server:
         except Exception:
             pass  # FIXME: just for demonstration right here (testing purposes)
 
+    # -
+
     @property
-    @precheck
+    @_precheck
     def is_online(self) -> bool:
         """
-        Returns a `bool` value which indicates whether the server is online or not.
+        Returns a boolean indicating whether the server is online or not.
         """
-
         return self.data['online']
 
     @property
-    @precheck
+    @_precheck
     def ip(self) -> str:
         """
         The IP address of the server.
         """
-
         return self.data['ip']
 
     @property
-    @precheck
+    @_precheck
     def port(self) -> int:
         """
         The port used to enter the server.
         """
-
         return self.data['port']
 
     @property
-    @precheck
+    @_precheck
     def hostname(self) -> str:
         """
         The hostname of the server.
         """
-
         return self.data['hostname']
 
     @property
-    @precheck
-    def id(self) -> str:
+    @_precheck
+    def id(self) -> Optional[str]:
         """
         The ID of the server. (`None` if Java Edition)
         """
-
-        try:
-            return self.data['serverid']
-        except KeyError:
-            return None
+        return self._get_basic_key('serverid')
 
     @property
-    @precheck
-    def gamemode(self) -> str:
+    @_precheck
+    def gamemode(self) -> Optional[str]:
         """
         The default gamemode of the server. (`None` if Java Edition)
         """
+        return self._get_basic_key('gamemode')
 
-        try:
-            return self.data['gamemode']
-        except KeyError:
-            return None
+    @property
+    @_precheck
+    def is_eula_blocked(self) -> Optional[bool]:
+        """
+        Returns a boolean indicating if EULA policy is blocked on the server. (`None` if Bedrock edition)
+        """
+        return self._get_basic_key('eula_blocked')
 
-    @precheck
+    @property
+    @_precheck
+    def version(self) -> Optional[str]:
+        """
+        The version of Minecraft used on the server. (`None` if not detected)
+        """
+        return self._get_basic_key('version')
+
+    @property
+    @_precheck
+    def software(self) -> Optional[str]:
+        """
+        The software used as the backend of the server. (`None` if not detected)
+        """
+        return self._get_basic_key('software')
+
+    @_precheck
     def get_debug_values(self) -> ServerDebugInfo:
         """
         Gives out a `ServerDebugValue` object containing all the accessible debug values of the given server.
@@ -182,7 +206,7 @@ class Server:
             apiversion=debug_values['apiversion'],
         )
 
-    @precheck
+    @_precheck
     def get_motd(self) -> ServerMOTD:
         """
         Gives out a `ServerMOTD` object containing the server's MOTD in different string types (clean, raw, HTML).
@@ -198,8 +222,8 @@ class Server:
         else:
             return ServerMOTD(raw=motd['raw'], clean=motd['clean'], html=motd['html'])
 
-    @precheck
-    def get_player_by_name(self, player_name: str) -> Player:
+    @_precheck
+    def get_player(self, name: str) -> Player:
         """
         Gives out a `Player` object representing a player currently playing on the Minecraft server.
 
@@ -210,14 +234,26 @@ class Server:
             `DataNotFoundError` - If the player data is not found.
         """
 
-        player = next((p for p in self.data['players']['list'] if p['name'] == player_name), None)
+        player = next((p for p in self.data['players']['list'] if p['name'] == name), None)
 
         if not player:
             raise DataNotFoundError('Failed to fetch player data.')
         else:
             return Player(name=player['name'], uuid=player['uuid'])
 
-    @precheck
+    @_precheck
+    def get_players(self) -> Optional[List[Player]]:
+        """
+        Gives out a list containing `Player` objects, each indicating an online player.\n
+        Returns `None` if no players are found.
+        """
+
+        try:
+            return [Player(name=name, uuid=uuid) for name, uuid in self.data['players']['list'].items()]
+        except KeyError:
+            return None
+
+    @_precheck
     def get_player_count(self) -> PlayerCount:
         """
         Gives out a `PlayerCount` object, representing the active player count of the Minecraft server.
@@ -231,19 +267,7 @@ class Server:
         except KeyError:
             raise DataNotFoundError('Failed to fetch player count data.')
 
-    @precheck
-    def get_players(self) -> Optional[List[Player]]:
-        """
-        Gives out a list containing `Player` objects, each indicating an online player.\n
-        Returns `None` if no players are found.
-        """
-
-        try:
-            return [Player(name=name, uuid=uuid) for name, uuid in self.data['players']['list'].items()]
-        except KeyError:
-            return None
-
-    @precheck
+    @_precheck
     def get_plugins(self) -> Optional[List[ServerPlugin]]:
         """
         Gives out a list of `ServerPlugin` objects, each representing a plugin used on the Minecraft server.
@@ -255,7 +279,7 @@ class Server:
         except KeyError:
             return None
 
-    @precheck
+    @_precheck
     def get_mods(self) -> Optional[List[ServerMod]]:
         """
         Gives out a list of `ServerMod` objects, each representing a mod used on the Minecraft server.
@@ -267,7 +291,7 @@ class Server:
         except KeyError:
             return None
 
-    @precheck
+    @_precheck
     def get_info(self) -> ServerInfo:
         """
         Gives out a `ServerInfo` object containing the server's base information (if any).
