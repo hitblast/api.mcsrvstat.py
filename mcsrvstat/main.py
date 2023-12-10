@@ -40,7 +40,7 @@ class Base:
             async with aiohttp.ClientSession() as session:
                 async with session.get(endpoint) as request:
                     if request.status != 200:
-                        raise DataNotFoundError('Request status not OK (failed).')
+                        raise DataNotFoundError(f'{request.status} (request failed).')
                     elif request.headers['Content-Type'] == 'image/png':
                         return await request.read()
                     else:
