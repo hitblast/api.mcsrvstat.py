@@ -3,7 +3,7 @@
 
 # Import built-in modules.
 import asyncio
-from typing import Any, List, Optional, Union
+from typing import Any, Callable, List, Optional, Union
 
 # Import third-party modules.
 import aiohttp
@@ -78,12 +78,12 @@ class Server:
         self.data = None
         self.data_icon = None
 
-    def _precheck(func):
+    def _precheck(func: Callable):
         """
         A redundancy decorator to ensure that the data of the server has been loaded.
         """
 
-        def wrapper(self, *args, **kwargs):
+        def wrapper(self, *args, **kwargs) -> Any:
             if not self.data or not self.data_icon:
                 raise UnloadedError
             else:
