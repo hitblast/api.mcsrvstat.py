@@ -10,12 +10,12 @@ from setuptools import find_packages, setup
 # Defiining the setup parameters.
 here = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
-    long_description = "\n" + f.read()
+with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = '\n' + f.read()
 
-with codecs.open(os.path.join(here, 'requirements.txt'), encoding="utf-8") as f:
+with codecs.open(os.path.join(here, 'requirements.txt'), encoding='utf-8') as f:
     lines = (x.strip() for x in f.read().splitlines())
-    requirements = [x for x in lines if x and not x.startswith("#")]
+    requirements = [x for x in lines if x and not x.startswith('#')]
 
 VERSION = '2023.9.4'
 DESCRIPTION = 'An asynchronous Python wrapper for the Minecraft Server Status API.'
