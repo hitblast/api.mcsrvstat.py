@@ -28,7 +28,7 @@ jobs:
         uses: chartboost/ruff-action@v1
         continue-on-error: true
         with:
-          args: check .
+          args: format --check .
 
       - name: Format
         uses: chartboost/ruff-action@v1
