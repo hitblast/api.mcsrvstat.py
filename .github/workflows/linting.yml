@@ -27,6 +27,8 @@ jobs:
         id: lintcheck
         uses: chartboost/ruff-action@v1
         continue-on-error: true
+        with:
+          args: check .
 
       - name: Format
         uses: chartboost/ruff-action@v1
