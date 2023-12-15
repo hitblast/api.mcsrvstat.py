@@ -17,17 +17,14 @@ with codecs.open(os.path.join(here, 'requirements.txt'), encoding='utf-8') as f:
     lines = (x.strip() for x in f.read().splitlines())
     requirements = [x for x in lines if x and not x.startswith('#')]
 
-VERSION = '2023.9.4'
-DESCRIPTION = 'An asynchronous Python wrapper for the Minecraft Server Status API.'
-
 # Setup.
 setup(
     name='api.mcsrvstat.py',
-    version=VERSION,
+    version='2023.12.16',
     author='HitBlast',
     author_email='<hitblastlive@gmail.com>',
     url='https://github.com/hitblast/api.mcsrvstat.py',
-    description=DESCRIPTION,
+    description='An asynchronous Python wrapper for the Minecraft Server Status API.',
     long_description_content_type='text/markdown',
     long_description=long_description,
     packages=find_packages(),
