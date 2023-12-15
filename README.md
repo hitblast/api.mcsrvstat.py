@@ -15,7 +15,7 @@ An asynchronous Python wrapper for the [Minecraft Server Status API](https://api
 | Checks | Status | 
 |:---|---:|
 | pretty code | [![Linting](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml/badge.svg)](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/linting.yml) |
-| style enforcement | [![Formatting](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/formatting.yml/badge.svg)](https://github.com/hitblast/api.mcsrvstat.py/actions/workflows/formatting.yml) |
+
 
 </div>
 
